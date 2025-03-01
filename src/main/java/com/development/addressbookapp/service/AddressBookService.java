@@ -8,44 +8,40 @@ import java.util.Optional;
 
 @Service
 public class AddressBookService {
-    private final AddressBookRepository repository;
 
     //Section:-01Address Book App Setup
-    //UC-01 Create an address book project to cater to REST Request from Address Book UI
+    //UC-02 Rest Controller to demonstrate the various HTTP methods
+
+    private final AddressBookRepository repository;
 
     public AddressBookService(AddressBookRepository repository) {
         this.repository = repository;
     }
 
-    //get all entries
     public List<AddressBook> getAllEntries() {
         return repository.findAll();
     }
 
-    //add a new entry
+    public Optional<AddressBook> getEntryById(Long id) {
+        return repository.findById(id);
+    }
+
     public AddressBook addEntry(AddressBook entry) {
         return repository.save(entry);
     }
 
-    //update entry by its id
-    public AddressBook updateEntry(Long id, AddressBook updatedEntry) {
+    public AddressBook updateEntry(Long id, AddressBook newEntry) {
         return repository.findById(id).map(entry -> {
-            entry.setName(updatedEntry.getName());
-            entry.setPhone(updatedEntry.getPhone());
-            entry.setEmail(updatedEntry.getEmail());
-            entry.setAddress(updatedEntry.getAddress());
+            entry.setName(newEntry.getName());
+            entry.setPhone(newEntry.getPhone());
+            entry.setEmail(newEntry.getEmail());
+            entry.setAddress(newEntry.getAddress());
             return repository.save(entry);
-        }).orElseThrow(() -> new RuntimeException("Entry not found"));
+        }).orElseThrow(() -> new RuntimeException("Entry not found with id: " + id));
     }
 
-    //delete entry by id
     public void deleteEntry(Long id) {
         repository.deleteById(id);
-    }
-
-    //get entry by id
-    public Optional<AddressBook> getEntryById(Long id) {
-        return repository.findById(id);
     }
 
 }

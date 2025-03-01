@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class AddressBook {
 
     //Section:-01Address Book App Setup
-    //UC-01 Create an address book project to cater to REST Request from Address Book UI
+    //UC-02 Rest Controller to demonstrate the various HTTP methods
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

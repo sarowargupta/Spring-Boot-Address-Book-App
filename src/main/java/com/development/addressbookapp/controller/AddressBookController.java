@@ -1,16 +1,16 @@
 package com.development.addressbookapp.controller;
 import com.development.addressbookapp.entity.AddressBook;
 import com.development.addressbookapp.service.AddressBookService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("addressbook")
 public class AddressBookController {
 
     //Section:-01Address Book App Setup
-    //UC-01 Create an address book project to cater to REST Request from Address Book UI
+    //UC-02 Rest Controller to demonstrate the various HTTP methods
 
     private final AddressBookService service;
 
@@ -18,35 +18,39 @@ public class AddressBookController {
         this.service = service;
     }
 
-    //get all entries
+    // Get all entries
     @GetMapping
-    public List<AddressBook> getAll() {
-        return service.getAllEntries();
-    }
-
-    //create a new entry
-    @PostMapping
-    public AddressBook addEntry(@RequestBody AddressBook entry) {
-        return service.addEntry(entry);
-    }
-
-    //delete an entry by ID
-    @DeleteMapping("/{id}")
-    public void deleteEntry(@PathVariable Long id) {
-        service.deleteEntry(id);
-    }
-
-    // Update an existing entry by ID
-    @PutMapping("/{id}")
-    public AddressBook updateEntry(@PathVariable Long id, @RequestBody AddressBook entry) {
-        return service.updateEntry(id, entry);
+    public ResponseEntity<List<AddressBook>> getAll() {
+        List<AddressBook> entries = service.getAllEntries();
+        return ResponseEntity.ok(entries);
     }
 
     // Get entry by ID
     @GetMapping("/{id}")
-    public Optional<AddressBook> getById(@PathVariable Long id) {
-        return service.getEntryById(id);
+    public ResponseEntity<AddressBook> getById(@PathVariable Long id) {
+        return service.getEntryById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
+    // Create a new entry
+    @PostMapping
+    public ResponseEntity<AddressBook> addEntry(@RequestBody AddressBook entry) {
+        AddressBook savedEntry = service.addEntry(entry);
+        return ResponseEntity.ok(savedEntry);
+    }
+
+    // Update an existing entry by ID
+    @PutMapping("/{id}")
+    public ResponseEntity<AddressBook> updateEntry(@PathVariable Long id, @RequestBody AddressBook entry) {
+        return ResponseEntity.ok(service.updateEntry(id, entry));
+    }
+
+    // Delete an entry by ID
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteEntry(@PathVariable Long id) {
+        service.deleteEntry(id);
+        return ResponseEntity.noContent().build();
+    }
 }
 
