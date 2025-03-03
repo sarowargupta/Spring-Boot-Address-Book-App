@@ -12,18 +12,18 @@ import java.util.List;
 public class AddressBookController {
 
     //Section:-02 Handling AddressBook DTO and Model in Address book Service layer
-    //UC-02 Introducing Service layer in Address Book app
+    //UC-03 Ability for the Services Layer to store the AddressBook Data
 
     @Autowired
     private AddressBookService service;
 
+    // Get all contacts
     @GetMapping
-    //get all entries
     public ResponseEntity<List<AddressBookDTO>> getAll() {
         return ResponseEntity.ok(service.getAllEntries());
     }
 
-    //get entries by id
+    // Get contact by ID
     @GetMapping("/{id}")
     public ResponseEntity<AddressBookDTO> getById(@PathVariable Long id) {
         return service.getEntryById(id)
@@ -31,24 +31,25 @@ public class AddressBookController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    //add new entry
+    // Add new contact
     @PostMapping
     public ResponseEntity<AddressBook> addEntry(@RequestBody AddressBookDTO dto) {
         return ResponseEntity.ok(service.addEntry(dto));
     }
 
-    //update entry by id
+    // Update existing contact
     @PutMapping("/{id}")
     public ResponseEntity<AddressBook> updateEntry(@PathVariable Long id, @RequestBody AddressBookDTO dto) {
-        return ResponseEntity.ok(service.updateEntry(id, dto));
+        return service.updateEntry(id, dto)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    //delete entry by id
+    // Delete contact
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEntry(@PathVariable Long id) {
-        service.deleteEntry(id);
-        return ResponseEntity.noContent().build();
+        boolean deleted = service.deleteEntry(id);
+        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
-
 }
 

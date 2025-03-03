@@ -12,8 +12,7 @@ import lombok.*;
 public class AddressBook {
 
     //Section:-02 Handling AddressBook DTO and Model in Address book Service layer
-    //UC-02 Introducing Service layer in Address Book app
-
+    //UC-03 Ability for the Services Layer to store the AddressBook Data
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

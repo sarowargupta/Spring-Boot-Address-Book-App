@@ -1,27 +1,20 @@
 package com.development.addressbookapp.dto;
-
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.*;
 
 //Section:-02 Handling AddressBook DTO and Model in Address book Service layer
-//UC-02 Introducing Service layer in Address Book app
+//UC-03 Ability for the Services Layer to store the AddressBook Data
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddressBookDTO {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
     private String name;
     private String phone;
+    private String email;
+    private String address;
 
-    public AddressBookDTO(String name, String phone) {
-        this.name = name;
-        this.phone = phone;
-    }
 
 }

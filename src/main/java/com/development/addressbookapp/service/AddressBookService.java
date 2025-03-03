@@ -13,45 +13,48 @@ import java.util.stream.Collectors;
 public class AddressBookService {
 
     //Section:-02 Handling AddressBook DTO and Model in Address book Service layer
-    //UC-02 Introducing Service layer in Address Book app
+    //UC-03 Ability for the Services Layer to store the AddressBook Data
 
     @Autowired
     private AddressBookRepository repository;
 
-    //get all entries
+    // Get all entries
     public List<AddressBookDTO> getAllEntries() {
-        return repository.findAll()
-                .stream()
-                .map(entry -> new AddressBookDTO(entry.getName(), entry.getPhone()))
+        return repository.findAll().stream()
+                .map(entry -> new AddressBookDTO(entry.getId(), entry.getName(), entry.getPhone(), entry.getEmail(), entry.getAddress()))
                 .collect(Collectors.toList());
     }
 
-    //get entry by id
+    // Get entry by ID
     public Optional<AddressBookDTO> getEntryById(Long id) {
         return repository.findById(id)
-                .map(entry -> new AddressBookDTO(entry.getName(), entry.getPhone()));
+                .map(entry -> new AddressBookDTO(entry.getId(), entry.getName(), entry.getPhone(), entry.getEmail(), entry.getAddress()));
     }
 
-    //add new entry
+    // Add a new entry
     public AddressBook addEntry(AddressBookDTO dto) {
-        AddressBook entry = new AddressBook();
-        entry.setName(dto.getName());
-        entry.setPhone(dto.getPhone());
+        AddressBook entry = new AddressBook(null, dto.getName(), dto.getPhone(), dto.getEmail(), dto.getAddress());
         return repository.save(entry);
     }
 
-    //update entry by id
-    public AddressBook updateEntry(Long id, AddressBookDTO dto) {
-        return repository.findById(id).map(entry -> {
-            entry.setName(dto.getName());
-            entry.setPhone(dto.getPhone());
-            return repository.save(entry);
-        }).orElseThrow(() -> new RuntimeException("Entry not found with id: " + id));
+    // Update an existing entry
+    public Optional<AddressBook> updateEntry(Long id, AddressBookDTO dto) {
+        return repository.findById(id)
+                .map(entry -> {
+                    entry.setName(dto.getName());
+                    entry.setPhone(dto.getPhone());
+                    entry.setEmail(dto.getEmail());
+                    entry.setAddress(dto.getAddress());
+                    return repository.save(entry);
+                });
     }
 
-    //delete entry by id
-    public void deleteEntry(Long id) {
-        repository.deleteById(id);
+    // Delete an entry
+    public boolean deleteEntry(Long id) {
+        if (repository.existsById(id)) {
+            repository.deleteById(id);
+            return true;
+        }
+        return false;
     }
-
 }
