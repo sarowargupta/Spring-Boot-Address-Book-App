@@ -6,7 +6,8 @@ import jakarta.persistence.Id;
 import lombok.*;
 
 //Section:-02 Handling AddressBook DTO and Model in Address book Service layer
-//UC-01 Introducing DTO and Model yo AddressBook App
+//UC-02 Introducing Service layer in Address Book app
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,7 +18,10 @@ public class AddressBookDTO {
     private Long id;
     private String name;
     private String phone;
-    private String email;
-    private String address;
+
+    public AddressBookDTO(String name, String phone) {
+        this.name = name;
+        this.phone = phone;
+    }
 
 }
