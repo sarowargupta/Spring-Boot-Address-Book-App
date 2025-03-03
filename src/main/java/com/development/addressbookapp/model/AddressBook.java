@@ -1,4 +1,4 @@
-package com.development.addressbookapp.entity;
+package com.development.addressbookapp.model;
 
 import jakarta.persistence.*;
 
@@ -6,8 +6,8 @@ import jakarta.persistence.*;
 //class Address Book
 public class AddressBook {
 
-    //Section:-01Address Book App Setup
-    //UC-02 Rest Controller to demonstrate the various HTTP methods
+    //Section:-02 Handling AddressBook DTO and Model in Address book Service layer
+    //UC-02 Introducing DTO and Model yo AddressBook App
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

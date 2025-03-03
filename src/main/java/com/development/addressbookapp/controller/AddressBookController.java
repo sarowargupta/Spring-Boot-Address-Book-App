@@ -1,5 +1,5 @@
 package com.development.addressbookapp.controller;
-import com.development.addressbookapp.entity.AddressBook;
+import com.development.addressbookapp.model.AddressBook;
 import com.development.addressbookapp.service.AddressBookService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,8 +9,8 @@ import java.util.List;
 @RequestMapping("addressbook")
 public class AddressBookController {
 
-    //Section:-01Address Book App Setup
-    //UC-02 Rest Controller to demonstrate the various HTTP methods
+    //Section:-02 Handling AddressBook DTO and Model in Address book Service layer
+    //UC-02 Introducing DTO and Model yo AddressBook App
 
     private final AddressBookService service;
 

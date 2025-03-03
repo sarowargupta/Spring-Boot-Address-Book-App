@@ -1,6 +1,6 @@
 package com.development.addressbookapp.repository;
 
-import com.development.addressbookapp.entity.AddressBook;
+import com.development.addressbookapp.model.AddressBook;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
