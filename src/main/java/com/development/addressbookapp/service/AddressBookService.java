@@ -10,7 +10,7 @@ import java.util.Optional;
 public class AddressBookService {
 
     //Section:-02 Handling AddressBook DTO and Model in Address book Service layer
-    //UC-02 Introducing DTO and Model yo AddressBook App
+    //UC-01 Introducing DTO and Model yo AddressBook App
 
     private final AddressBookRepository repository;
 
