@@ -12,11 +12,16 @@ import java.util.stream.Collectors;
 @Service
 public class AddressBookService {
 
-    //Section:-02 Handling AddressBook DTO and Model in Address book Service layer
-    //UC-03 Ability for the Services Layer to store the AddressBook Data
-
+    //Section:-03 Application Setting
+    //UC-01 use Lombok library to auto generate getters and setters for the DTO
     @Autowired
     private AddressBookRepository repository;
+
+    // Convert Model to DTO
+    private AddressBookDTO convertToDTO(AddressBook addressBook) {
+        return new AddressBookDTO(addressBook.getId(), addressBook.getName(), addressBook.getPhone(), addressBook.getEmail(), addressBook.getAddress());
+    }
+
 
     // Get all entries
     public List<AddressBookDTO> getAllEntries() {

@@ -1,8 +1,8 @@
 package com.development.addressbookapp.dto;
 import lombok.*;
 
-//Section:-02 Handling AddressBook DTO and Model in Address book Service layer
-//UC-03 Ability for the Services Layer to store the AddressBook Data
+//Section:-03 Application Setting
+//UC-01 use Lombok library to auto generate getters and setters for the DTO
 
 @Getter
 @Setter

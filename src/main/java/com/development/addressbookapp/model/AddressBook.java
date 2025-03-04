@@ -11,11 +11,10 @@ import lombok.*;
 //class Address Book
 public class AddressBook {
 
-    //Section:-02 Handling AddressBook DTO and Model in Address book Service layer
-    //UC-03 Ability for the Services Layer to store the AddressBook Data
-
+    //Section:-03 Application Setting
+    //UC-01 use Lombok library to auto generate getters and setters for the DTO
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment ID
     private Long id;
     private String name;
     private String phone;
