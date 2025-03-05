@@ -2,7 +2,7 @@ package com.development.addressbookapp.dto;
 import lombok.*;
 
 //Section:-03 Application Setting
-//UC-04 Database setting as Environment Variables
+// UC-04 Database setting as Environment Variables
 
 @Getter
 @Setter
