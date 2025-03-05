@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class AddressBookService {
 
     //Section:-03 Application Setting
-    // UC-02 use Lombok library for logging
+    //UC-03 Determine the logging levels
 
     @Autowired
     private AddressBookRepository repository;

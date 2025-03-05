@@ -12,7 +12,7 @@ import lombok.*;
 public class AddressBook {
 
     //Section:-03 Application Setting
-    // UC-02 use Lombok library for logging
+    //UC-03 Determine logging levels
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment ID
     private Long id;
