@@ -2,7 +2,7 @@ package com.development.addressbookapp.dto;
 import lombok.*;
 
 //Section:-03 Application Setting
-//UC-01 use Lombok library to auto generate getters and setters for the DTO
+//UC-02 use Lombok library for logging
 
 @Getter
 @Setter

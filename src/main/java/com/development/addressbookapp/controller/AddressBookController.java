@@ -1,55 +1,58 @@
 package com.development.addressbookapp.controller;
 import com.development.addressbookapp.dto.AddressBookDTO;
-import com.development.addressbookapp.model.AddressBook;
 import com.development.addressbookapp.service.AddressBookService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("addressbook")
+@RequestMapping("/api/addressbook")
+@Slf4j  // Enables logging
 public class AddressBookController {
 
-    //Section:-03 Application Setting
-    //UC-01 use Lombok library to auto generate getters and setters for the DTO
+     //Section:-03 Application Setting
+     // UC-02 use Lombok library for logging
 
     @Autowired
     private AddressBookService service;
 
-    // Get all contacts
+    //get all entity
     @GetMapping
-    public ResponseEntity<List<AddressBookDTO>> getAll() {
+    public ResponseEntity<List<AddressBookDTO>> getAllEntries() {
+        log.info("Received request to fetch all entries");
         return ResponseEntity.ok(service.getAllEntries());
     }
 
-    // Get contact by ID
+    //get entity by id
     @GetMapping("/{id}")
-    public ResponseEntity<AddressBookDTO> getById(@PathVariable Long id) {
-        return service.getEntryById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<?> getEntryById(@PathVariable Long id) {
+        log.info("Received request to fetch entry with ID: {}", id);
+        AddressBookDTO dto = service.getEntryById(id);
+        return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
     }
 
-    // Add new contact
+    //create a new entry
     @PostMapping
-    public ResponseEntity<AddressBook> addEntry(@RequestBody AddressBookDTO dto) {
+    public ResponseEntity<AddressBookDTO> addEntry(@RequestBody AddressBookDTO dto) {
+        log.info("Received request to add new entry: {}", dto);
         return ResponseEntity.ok(service.addEntry(dto));
     }
 
-    // Update existing contact
+    //update an entry
     @PutMapping("/{id}")
-    public ResponseEntity<AddressBook> updateEntry(@PathVariable Long id, @RequestBody AddressBookDTO dto) {
-        return service.updateEntry(id, dto)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<?> updateEntry(@PathVariable Long id, @RequestBody AddressBookDTO dto) {
+        log.info("Received request to update entry with ID: {}", id);
+        AddressBookDTO updatedDto = service.updateEntry(id, dto);
+        return updatedDto != null ? ResponseEntity.ok(updatedDto) : ResponseEntity.notFound().build();
     }
 
-    // Delete contact
+    //delete an entry
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEntry(@PathVariable Long id) {
+    public ResponseEntity<String> deleteEntry(@PathVariable Long id) {
+        log.info("Received request to delete entry with ID: {}", id);
         boolean deleted = service.deleteEntry(id);
-        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+        return deleted ? ResponseEntity.ok("Entry deleted successfully") : ResponseEntity.notFound().build();
     }
 }
-

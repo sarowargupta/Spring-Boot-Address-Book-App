@@ -12,7 +12,7 @@ import lombok.*;
 public class AddressBook {
 
     //Section:-03 Application Setting
-    //UC-01 use Lombok library to auto generate getters and setters for the DTO
+    // UC-02 use Lombok library for logging
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment ID
     private Long id;
@@ -20,6 +20,13 @@ public class AddressBook {
     private String phone;
     private String email;
     private String address;
+
+    public AddressBook(String name, String phone, String email, String address) {
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+    }
 
 }
 

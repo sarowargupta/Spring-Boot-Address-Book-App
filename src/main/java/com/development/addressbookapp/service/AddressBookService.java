@@ -2,6 +2,7 @@ package com.development.addressbookapp.service;
 import com.development.addressbookapp.dto.AddressBookDTO;
 import com.development.addressbookapp.model.AddressBook;
 import com.development.addressbookapp.repository.AddressBookRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -10,56 +11,67 @@ import java.util.stream.Collectors;
 
 
 @Service
+@Slf4j  // Enables logging
 public class AddressBookService {
 
     //Section:-03 Application Setting
-    //UC-01 use Lombok library to auto generate getters and setters for the DTO
+    // UC-02 use Lombok library for logging
+
     @Autowired
     private AddressBookRepository repository;
 
-    // Convert Model to DTO
+    //convert entity to dto
     private AddressBookDTO convertToDTO(AddressBook addressBook) {
         return new AddressBookDTO(addressBook.getId(), addressBook.getName(), addressBook.getPhone(), addressBook.getEmail(), addressBook.getAddress());
     }
 
-
-    // Get all entries
+    //get all entries
     public List<AddressBookDTO> getAllEntries() {
-        return repository.findAll().stream()
-                .map(entry -> new AddressBookDTO(entry.getId(), entry.getName(), entry.getPhone(), entry.getEmail(), entry.getAddress()))
-                .collect(Collectors.toList());
+        log.info("Fetching all address book entries");
+        return repository.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
-    // Get entry by ID
-    public Optional<AddressBookDTO> getEntryById(Long id) {
-        return repository.findById(id)
-                .map(entry -> new AddressBookDTO(entry.getId(), entry.getName(), entry.getPhone(), entry.getEmail(), entry.getAddress()));
+    //get entity by id
+    public AddressBookDTO getEntryById(Long id) {
+        log.debug("Fetching address book entry with ID: {}", id);
+        Optional<AddressBook> addressBook = repository.findById(id);
+        return addressBook.map(this::convertToDTO).orElse(null);
     }
 
-    // Add a new entry
-    public AddressBook addEntry(AddressBookDTO dto) {
-        AddressBook entry = new AddressBook(null, dto.getName(), dto.getPhone(), dto.getEmail(), dto.getAddress());
-        return repository.save(entry);
+    //add a new entry
+    public AddressBookDTO addEntry(AddressBookDTO dto) {
+        log.info("Adding new address book entry: {}", dto);
+        AddressBook addressBook = new AddressBook(null, dto.getName(), dto.getPhone(), dto.getEmail(), dto.getAddress());
+        return convertToDTO(repository.save(addressBook));
     }
 
-    // Update an existing entry
-    public Optional<AddressBook> updateEntry(Long id, AddressBookDTO dto) {
-        return repository.findById(id)
-                .map(entry -> {
-                    entry.setName(dto.getName());
-                    entry.setPhone(dto.getPhone());
-                    entry.setEmail(dto.getEmail());
-                    entry.setAddress(dto.getAddress());
-                    return repository.save(entry);
-                });
+    //update an entry
+    public AddressBookDTO updateEntry(Long id, AddressBookDTO dto) {
+        log.debug("Updating entry with ID: {}", id);
+        Optional<AddressBook> addressBookOptional = repository.findById(id);
+        if (addressBookOptional.isPresent()) {
+            AddressBook addressBook = addressBookOptional.get();
+            addressBook.setName(dto.getName());
+            addressBook.setPhone(dto.getPhone());
+            addressBook.setEmail(dto.getEmail());
+            addressBook.setAddress(dto.getAddress());
+
+            log.info("Updated entry: {}", addressBook);
+            return convertToDTO(repository.save(addressBook));
+        }
+        log.warn("Entry with ID {} not found", id);
+        return null;
     }
 
-    // Delete an entry
+    //delete an entry
     public boolean deleteEntry(Long id) {
+        log.debug("Deleting entry with ID: {}", id);
         if (repository.existsById(id)) {
             repository.deleteById(id);
+            log.info("Entry with ID {} deleted successfully", id);
             return true;
         }
+        log.warn("Entry with ID {} not found", id);
         return false;
     }
 }
