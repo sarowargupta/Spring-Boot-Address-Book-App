@@ -6,8 +6,8 @@ import lombok.*;
 @Data
 public class AddressBookDTO {
 
-    //Section:-04 Data Validation and Exception Handling in Address Book App
-    //UC-02 Provide User Friendly in case validation fails
+   //Section:-04 Data Validation and Exception Handling in Address Book App
+   //UC-03 Ability to throw User Friendly Errors
 
  private Long id;
     @NotEmpty(message = "Name cannot be empty")

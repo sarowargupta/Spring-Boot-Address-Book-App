@@ -1,5 +1,4 @@
 package com.development.addressbookapp.model;
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +11,7 @@ import lombok.*;
 public class AddressBook {
 
     //Section:-04 Data Validation and Exception Handling in Address Book App
-    //UC-02 Provide User Friendly in case validation fails
+    //UC-03 Ability to throw User Friendly Errors
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment ID

@@ -12,7 +12,7 @@ import java.util.List;
 public class AddressBookController {
 
      //Section:-04 Data Validation and Exception Handling in Address Book App
-     //UC-02 Provide User Friendly in case validation fails
+     //UC-03 Ability to throw User Friendly Errors
 
     private final AddressBookService addressBookService;
 
@@ -20,36 +20,36 @@ public class AddressBookController {
         this.addressBookService = addressBookService;
     }
 
-    // Get all entries
+    //get all entry
     @GetMapping
     public ResponseEntity<List<AddressBook>> getAllEntries() {
         return ResponseEntity.ok(addressBookService.getAllEntries());
     }
 
-    // Get entry by ID
+    //get entry by id
     @GetMapping("/{id}")
     public ResponseEntity<AddressBook> getEntryById(@PathVariable Long id) {
         return ResponseEntity.ok(addressBookService.getEntryById(id));
     }
 
-    // Add a new entry
+    //add a new entry
     @PostMapping
     public ResponseEntity<AddressBook> createEntry(@Valid @RequestBody AddressBookDTO addressBookDTO) {
-        AddressBook savedEntry = addressBookService.createEntry(addressBookDTO);
-        return ResponseEntity.ok(savedEntry);
+        AddressBook createdEntry = addressBookService.createEntry(addressBookDTO);
+        return ResponseEntity.ok(createdEntry);
     }
 
-    // Update an entry by ID
+    //update entry by id
     @PutMapping("/{id}")
     public ResponseEntity<AddressBook> updateEntry(@PathVariable Long id, @Valid @RequestBody AddressBookDTO addressBookDTO) {
         AddressBook updatedEntry = addressBookService.updateEntry(id, addressBookDTO);
         return ResponseEntity.ok(updatedEntry);
     }
 
-    // Delete an entry by ID
+    //delete entry by id
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEntry(@PathVariable Long id) {
+    public ResponseEntity<String> deleteEntry(@PathVariable Long id) {
         addressBookService.deleteEntry(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("Entry deleted successfully!");
     }
 }
