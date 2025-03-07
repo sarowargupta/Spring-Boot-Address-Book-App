@@ -12,7 +12,7 @@ import lombok.*;
 public class AddressBook {
 
     //Section:-04 Data Validation and Exception Handling in Address Book App
-    //UC-01 Add Validation to name field so the REST call can be validated
+    //UC-02 Provide User Friendly in case validation fails
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment ID

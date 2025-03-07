@@ -10,7 +10,7 @@ import java.util.List;
 public class AddressBookService {
 
     //Section:-04 Data Validation and Exception Handling in Address Book App
-    //UC-01 Add Validation to name field so the REST call can be validated
+    //UC-02 Provide User Friendly in case validation fails
 
     @Autowired
     private AddressBookRepository addressBookRepository;
