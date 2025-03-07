@@ -11,8 +11,9 @@ import lombok.*;
 //class Address Book
 public class AddressBook {
 
-    //Section:-03 Application Setting
-    // UC-04 Database setting as Environment Variables
+    //Section:-04 Data Validation and Exception Handling in Address Book App
+    //UC-01 Add Validation to name field so the REST call can be validated
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment ID
     private Long id;

@@ -2,76 +2,58 @@ package com.development.addressbookapp.service;
 import com.development.addressbookapp.dto.AddressBookDTO;
 import com.development.addressbookapp.model.AddressBook;
 import com.development.addressbookapp.repository.AddressBookRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 
 @Service
-@Slf4j  // Enables logging
 public class AddressBookService {
 
-    //Section:-03 Application Setting
-    //UC-04 Database setting as Environment Variable
+    //Section:-04 Data Validation and Exception Handling in Address Book App
+    //UC-01 Add Validation to name field so the REST call can be validated
 
     @Autowired
-    private AddressBookRepository repository;
+    private AddressBookRepository addressBookRepository;
 
-    //convert entity to dto
-    private AddressBookDTO convertToDTO(AddressBook addressBook) {
-        return new AddressBookDTO(addressBook.getId(), addressBook.getName(), addressBook.getPhone(), addressBook.getEmail(), addressBook.getAddress());
+    //get all entry
+    public List<AddressBook> getAllEntries() {
+        return addressBookRepository.findAll();
     }
 
-    //get all entries
-    public List<AddressBookDTO> getAllEntries() {
-        log.info("Fetching all address book entries");
-        return repository.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
+    //get entry by id
+    public AddressBook getEntryById(Long id) {
+        return addressBookRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Entry not found with ID: " + id));
     }
 
-    //get entity by id
-    public AddressBookDTO getEntryById(Long id) {
-        log.debug("Fetching address book entry with ID: {}", id);
-        Optional<AddressBook> addressBook = repository.findById(id);
-        return addressBook.map(this::convertToDTO).orElse(null);
+    // Add a new entry
+    public AddressBook createEntry(AddressBookDTO addressBookDTO) {
+        AddressBook newEntry = new AddressBook();
+        newEntry.setName(addressBookDTO.getName());
+        newEntry.setPhone(addressBookDTO.getPhone());
+        newEntry.setEmail(addressBookDTO.getEmail());
+        newEntry.setAddress(addressBookDTO.getAddress());
+        return addressBookRepository.save(newEntry);
     }
 
-    //add a new entry
-    public AddressBookDTO addEntry(AddressBookDTO dto) {
-        log.info("Adding new address book entry: {}", dto);
-        AddressBook addressBook = new AddressBook(null, dto.getName(), dto.getPhone(), dto.getEmail(), dto.getAddress());
-        return convertToDTO(repository.save(addressBook));
+    // Update an entry by ID
+    public AddressBook updateEntry(Long id, AddressBookDTO addressBookDTO) {
+        AddressBook existingEntry = addressBookRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Entry not found with ID: " + id));
+
+        existingEntry.setName(addressBookDTO.getName());
+        existingEntry.setPhone(addressBookDTO.getPhone());
+        existingEntry.setEmail(addressBookDTO.getEmail());
+        existingEntry.setAddress(addressBookDTO.getAddress());
+
+        return addressBookRepository.save(existingEntry);
     }
 
-    //update an entry
-    public AddressBookDTO updateEntry(Long id, AddressBookDTO dto) {
-        log.debug("Updating entry with ID: {}", id);
-        Optional<AddressBook> addressBookOptional = repository.findById(id);
-        if (addressBookOptional.isPresent()) {
-            AddressBook addressBook = addressBookOptional.get();
-            addressBook.setName(dto.getName());
-            addressBook.setPhone(dto.getPhone());
-            addressBook.setEmail(dto.getEmail());
-            addressBook.setAddress(dto.getAddress());
-
-            log.info("Updated entry: {}", addressBook);
-            return convertToDTO(repository.save(addressBook));
+    //delete entry by id
+    public void deleteEntry(Long id) {
+        if (!addressBookRepository.existsById(id)) {
+            throw new RuntimeException("Entry not found with ID: " + id);
         }
-        log.warn("Entry with ID {} not found", id);
-        return null;
-    }
-
-    //delete an entry
-    public boolean deleteEntry(Long id) {
-        log.debug("Deleting entry with ID: {}", id);
-        if (repository.existsById(id)) {
-            repository.deleteById(id);
-            log.info("Entry with ID {} deleted successfully", id);
-            return true;
-        }
-        log.warn("Entry with ID {} not found", id);
-        return false;
+        addressBookRepository.deleteById(id);
     }
 }
